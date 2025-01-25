@@ -1,6 +1,8 @@
 -- Create a safar database if not exist and create a table login
 CREATE DATABASE IF NOT EXISTS safar;
+
 USE safar;
+
 CREATE TABLE IF NOT EXISTS login(
 	email_address VARCHAR(255) NOT NULL,
 	phone_number VARCHAR(255) NOT NULL,
