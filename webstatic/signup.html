@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Signup</title>
     <link rel="stylesheet" href="assets/css/style2.css">
 </head>
 
@@ -13,23 +13,26 @@
         <div class="content">
             <div class="hd1">Get Started Now</div>
             <div class="form-s">
-                <div class="form-e"><label for="Name"  class="name">Name</label> <input type="text"
-                        placeholder="Enter your Name" class="from-in">
+                <div class="form-e">
+                    <label for="Name" class="name">Name</label>
+                    <input type="text" placeholder="Enter your Name" class="from-in" id="name" required>
                 </div>
-                <div class="form-e"><label for="Email address"  class="mail">Email address</label> <input
-                        type="text" placeholder="Enter your email" class="from-in">
+                <div class="form-e">
+                    <label for="Email address" class="mail">Email address</label>
+                    <input type="email" placeholder="Enter your email" class="from-in" id="email" required>
                 </div>
 
-                <div class="form-e"><label for="Password">Password</label> <input type="password"
-                        placeholder="Enter your password" class="from-in">
+                <div class="form-e">
+                    <label for="Password">Password</label>
+                    <input type="password" placeholder="Enter your password" class="from-in" id="password" required>
                 </div>
                 <div>
                     <div class="rembr">
-                        <input type="checkbox">
-                        I agree to the <span class="agree" >terms & policy</span>
+                        <input type="checkbox" id="terms" required>
+                        I agree to the <span class="agree">terms & policy</span>
                     </div>
                     <div class="login-btn">
-                        <button>Signup</button>
+                        <button type="button" onclick="submitForm()">Signup</button>
                     </div>
                 </div>
                 <div class="or">or</div>
@@ -39,9 +42,41 @@
                 Sign in with Google
             </div>
 
-            <div class="dnt-act" > Have an account? <span > <a href="signin.html">Sign In</a></span></div>
+            <div class="dnt-act"> Have an account? <span> <a href="signin.html">Sign In</a></span></div>
         </div>
     </div>
+
+    <script>
+        // Simulate backend function with mock API
+        function submitForm() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const termsAccepted = document.getElementById("terms").checked;
+
+            // Check if all fields are valid
+            if (name && email && password && termsAccepted) {
+                // Simulating API POST request
+                const mockApiResponse = {
+                    status: 200,
+                    message: "User registered successfully"
+                };
+
+                // Mock API simulation
+                setTimeout(() => {
+                    if (mockApiResponse.status === 200) {
+                        alert(mockApiResponse.message);
+                        // Optionally, redirect to another page
+                        window.location.href = 'signin.html'; // Redirect to login page
+                    } else {
+                        alert("Error: " + mockApiResponse.message);
+                    }
+                }, 1000);
+            } else {
+                alert("Please fill all fields and agree to the terms.");
+            }
+        }
+    </script>
 </body>
 
 </html>

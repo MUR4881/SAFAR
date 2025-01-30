@@ -4,22 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="assets/css/style2.css">
 </head>
 
 <body>
     <div class="container">
+        <!-- User Info Section -->
         <div class="id">
-            <li>Name:</li>
-            <li>User_ID:</li>
+            <li>Name: <span id="userName"></span></li>
+            <li>User_ID: <span id="userId"></span></li>
         </div>
+
+        <!-- Summary Section -->
         <div class="summary">
             <div class="sum-sec">
                 <div><img src="assets/images/Group 10.png" alt="" width="60%"></div>
                 <div>
                     <div class="cot-ls">Total Customers</div>
-                    <div class="nub">0</div>
+                    <div class="nub" id="customerCount">0</div> <!-- Customer Count -->
                 </div>
             </div>
             <hr>
@@ -27,7 +30,7 @@
                 <div><img src="assets/images/Group 10.png" alt="" width="60%"></div>
                 <div class="number">
                     <div class="cot-ls">Employees</div>
-                    <div class="nub">0</div>
+                    <div class="nub">0</div> <!-- This can be expanded for employee data if needed -->
                 </div>
             </div>
             <hr>
@@ -35,96 +38,68 @@
                 <div><img src="assets/images/Group 10.png" alt="" width="60%"></div>
                 <div>
                     <div class="cot-ls">Active Now</div>
-                    <div class="nub">0</div>
+                    <div class="nub">0</div> <!-- This can be expanded for active users -->
                 </div>
             </div>
         </div>
-        <div style="background-color: #ffffff; border-radius: 5px; padding: 40px; ">
-            <h2>All Customers</h2>
-            <table >
-                <tr>
-                    <th>Customer Name</th>
-                    <th>Title</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Location</th>
-                    <th>Destination/Status</th>
-                </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Driver</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="act-status">lagos</span>
 
-
-                    </td>
-                </tr>
+        <!-- Orders Table Section -->
+        <div style="background-color: #ffffff; border-radius: 5px; padding: 40px;">
+            <h2>Your Orders</h2>
+            <table>
                 <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="no-status">lagos</span>
-                    </td>
+                    <th>Order ID</th>
+                    <th>Current State</th>
+                    <th>Destination</th>
+                    <th>Date of Trip</th>
+                    <th>Payment Method</th>
                 </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="no-status">lagos</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="act-status">lagos</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="act-status">lagos</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="act-status">lagos</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Jane Cooper</td>
-                    <td>Passanger</td>
-                    <td>(255)555-0118</td>
-                    <td>jane@microsoft.com</td>
-                    <td>Abuja</td>
-                    <td>
-                        <span class="act-status">lagos</span>
-                    </td>
-                </tr>
+                <tbody id="ordersTableBody"></tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+            // If the user is not logged in, redirect to sign-in page
+            if (isLoggedIn !== "true") {
+                window.location.href = "signin.html";
+            }
+
+            // Load user data from localStorage
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                document.getElementById("userName").innerText = user.email;
+                document.getElementById("userId").innerText = user.email;
+            }
+
+            // Load orders from localStorage
+            const orders = JSON.parse(localStorage.getItem("orders")) || [];
+            const ordersTableBody = document.getElementById("ordersTableBody");
+
+            // Add each order to the table
+            orders.forEach(order => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${order.orderId}</td>
+                    <td>${order.currentState}</td>
+                    <td>${order.destination}</td>
+                    <td>${order.tripDate}</td>
+                    <td>${order.paymentMethod}</td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+
+            // Load customers from localStorage and update the total count
+            const customers = JSON.parse(localStorage.getItem("customers")) || [];
+            const customerCount = customers.length;
+            document.getElementById("customerCount").innerText = customerCount;
+
+            // Optional: Handle other statistics like active users or employees, if needed.
+        });
+    </script>
 </body>
 
 </html>

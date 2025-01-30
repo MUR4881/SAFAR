@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign In</title>
     <link rel="stylesheet" href="assets/css/style2.css">
 </head>
 
@@ -14,29 +14,47 @@
             <div class="hd1">Welcome Back!</div>
             <div class="hd2">Enter Your Credentials To Access Your Account</div>
             <div class="form-s">
-                <div class="form-e"><label for="Email address" style="display: block;">Email address</label> <input
-                        type="text" placeholder="Enter your email" class="from-in">
+                <div class="form-e">
+                    <label for="Email address">Email address</label>
+                    <input type="text" placeholder="Enter your email" id="email" class="from-in" required>
                 </div>
-                <div class="forget">forget password</div>
-                <div class="form-e"><label for="Password">Password</label> <input type="password"
-                        placeholder="Enter your password" class="from-in">
+                <div class="form-e">
+                    <label for="Password">Password</label>
+                    <input type="password" placeholder="Enter your password" id="password" class="from-in" required>
                 </div>
-                <div>
-                    <div class="rembr">
-                        <input type="checkbox">
-                        Remember for 30 days
-                    </div>
-                    <div class="login-btn">
-                        <button>Login</button>
-                    </div>
+                <div class="login-btn">
+                    <button type="button" onclick="loginUser()">Login</button>
                 </div>
             </div>
             <div class="sign-opt">
                 Sign in with Google
             </div>
-            <div class="dnt-act">Don't have an account? <span><a href="signup.html"> Sign Up</span></a></div>
+            <div class="dnt-act">Don't have an account? <span><a href="signup.html">Sign Up</a></span></div>
         </div>
     </div>
+
+    <script>
+        function loginUser() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Simple validation for demonstration
+            if (!email || !password) {
+                alert("Please fill in both fields.");
+                return;
+            }
+
+            // Save user info to localStorage
+            const user = { email, password }; // Simulated user data
+            localStorage.setItem("user", JSON.stringify(user));
+
+            // Mark the user as logged in
+            localStorage.setItem("isLoggedIn", "true");
+
+            // Redirect to the order
+            window.location.href = "order.html";
+        }
+    </script>
 </body>
 
 </html>

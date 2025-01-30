@@ -4,42 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Order Form</title>
     <link rel="stylesheet" href="assets/css/style2.css">
 </head>
 
 <body>
     <div class="container">
         <div class="content">
-            <!-- <div class="hd1">Welcome Back!</div>
-            <div class="hd2">Enter Your Credentials To Access Your Account</div> -->
+            <h2>Order Your Trip</h2>
             <div class="form-s">
-                <div class="form-e"><label for="Current State" style="display: block;">Current State</label> <input
-                        type="text" placeholder="Current State" class="from-in">
+                <div class="form-e">
+                    <label for="currentState">Current State</label>
+                    <input type="text" placeholder="Enter Current State" id="currentState" class="from-in" required>
                 </div>
 
-                <div class="form-e"><label for="Destination">Destination</label> <input type="text"
-                        placeholder="Enter your Destination" class="from-in">
+                <div class="form-e">
+                    <label for="destination">Destination</label>
+                    <input type="text" placeholder="Enter Destination" id="destination" class="from-in" required>
                 </div>
-                <div class="form-e"><label for="Date">Date Of Trip</label> <input type="date" placeholder=""
-                        class="from-in">
-                </div>
-                <div>
-                    <div class="rembr">
-                        <label for="payment">Payment Method </label>
-                        <select name="payment" id="">
-                            <option value="payment">Card</option>
-                            <option value="payment">Transfer</option>
-                        </select>
 
-                    </div>
-                    <div class="login-btn">
-                        <button>Proceed</button>
-                    </div>
+                <div class="form-e">
+                    <label for="tripDate">Date of Trip</label>
+                    <input type="date" id="tripDate" class="from-in" required>
+                </div>
+
+                <div class="form-e">
+                    <label for="payment">Payment Method</label>
+                    <select id="payment" class="from-in" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="card">Card</option>
+                        <option value="transfer">Bank Transfer</option>
+                    </select>
+                </div>
+
+                <div class="login-btn">
+                    <button type="button" onclick="submitOrder()">Proceed</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Check if the user is logged in
+        document.addEventListener('DOMContentLoaded', function () {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+            // If the user is not logged in, redirect them to the sign-in page
+            if (isLoggedIn !== "true") {
+                window.location.href = "signin.html"; // Redirect to sign-in page
+            }
+        });
+
+        // Submit order and save it to localStorage
+        function submitOrder() {
+            const currentState = document.getElementById("currentState").value;
+            const destination = document.getElementById("destination").value;
+            const tripDate = document.getElementById("tripDate").value;
+            const paymentMethod = document.getElementById("payment").value;
+
+            if (!currentState || !destination || !tripDate || !paymentMethod) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const order = {
+                currentState,
+                destination,
+                tripDate,
+                paymentMethod,
+                orderId: new Date().getTime() // Unique order ID based on timestamp
+            };
+
+            // Get previous orders or initialize an empty array
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders.push(order);
+
+            // Save updated orders to localStorage
+            localStorage.setItem("orders", JSON.stringify(orders));
+
+            // Save the customer data (if they are placing the order for the first time)
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                let customers = JSON.parse(localStorage.getItem("customers")) || [];
+                // Add the customer if not already added
+                if (!customers.find(c => c.email === user.email)) {
+                    customers.push(user); // Assuming user data includes at least email
+                    localStorage.setItem("customers", JSON.stringify(customers));
+                }
+            }
+
+            // Redirect to dashboard
+            alert("Order placed successfully!");
+            window.location.href = 'dashbord.html'; // Redirect to dashboard after order is placed
+        }
+    </script>
 </body>
 
 </html>
